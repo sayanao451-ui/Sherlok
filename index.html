@@ -2,101 +2,113 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Index</title>
+    <title>Slideshow with Countdown</title>
     <style>
         body {
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            animation: pulse 5s infinite;
-            transition: background-color 0.5s;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            color: white;
+            font-family: Arial, sans-serif;
         }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; } 
-            50% { opacity: 0.8; }
-        }
-
-        .slideshow {
+        .slideshow-container {
             position: relative;
             width: 100%;
-            height: 400px;
-            overflow: hidden;
+            height: 100vh;
+            background: url('background-video.mp4') no-repeat center center fixed;
+            background-size: cover;
         }
-
-        .slideshow img {
-            width: 100%;
-            height: auto;
-            animation: fade 1.5s ease-in-out forwards;
+        .mySlides {
+            display: none;
         }
-
-        @keyframes fade {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .text {
+            position: absolute;
+            bottom: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 29px;
+            color: black;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
         }
-
         .countdown {
-            font-size: 2em;
-            text-align: center;
-            color: #ff4500;
-            text-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
-            animation: glow 1.5s infinite alternate;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
         }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(255, 69, 0, 0.5); }
-            to { text-shadow: 0 0 20px rgba(255, 69, 0, 1); }
-        }
-
-        .scale {
-            transition: transform 0.3s;
-        }
-
-        .scale:hover {
-            transform: scale(1.1);
+        audio {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: -1;
         }
     </style>
 </head>
 <body>
-    <div class="slideshow">
-        <img src="foto1.JPG" alt="Slide 1" class="scale">
-        <img src="foto2.JPG" alt="Slide 2" class="scale" style="display:none;">
+
+<div class="slideshow-container">
+
+    <div class="mySlides">
+        <img src="img1.jpg" style="width:100%">
+        <div class="text">Caption 1</div>
     </div>
-    <div class="countdown" id="countdown-timer"></div>
-    <audio controls>
-        <source src="musik.mp3" type="audio/mpeg">
+
+    <div class="mySlides">
+        <img src="img2.jpg" style="width:100%">
+        <div class="text">Caption 2</div>
+    </div>
+
+    <div class="mySlides">
+        <img src="img3.jpg" style="width:100%">
+        <div class="text">Caption 3</div>
+    </div>
+
+    <div class="countdown" id="countdown"></div>
+
+    <audio autoplay loop>
+        <source src="background-music.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
-    <script>
-        // Countdown timer script
-        function startCountdown(duration) {
-            let timer = duration, minutes, seconds;
-            setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-                document.getElementById('countdown-timer').textContent = minutes + ':' + seconds;
-                if (--timer < 0) {
-                    timer = duration;
-                }
-            }, 1000);
+</div>
+
+<script>
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
         }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}    
+        slides[slideIndex-1].style.display = "block";  
+        setTimeout(showSlides, 5000); // Change image every 5 seconds
+    }
 
-        // Start countdown with a duration of 120 seconds
-        startCountdown(120);
+    function updateCountdown() {
+        const countDownDate = new Date("2026-05-02").getTime();
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = "Countdown finished!";
+        }
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+</script>
 
-        // Slideshow logic
-        let slides = document.querySelectorAll('.slideshow img');
-        let currentSlide = 0;
-        setInterval(() => {
-            slides[currentSlide].style.display = 'none';
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].style.display = 'block';
-            slides[currentSlide].classList.add('scale');
-        }, 3000);
-    </script>
-    <video width="320" height="240" controls>
-        <source src="Bg.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
 </body>
 </html>
