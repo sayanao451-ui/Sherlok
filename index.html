@@ -3,95 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Sherlok</title>
+    <title>Sherlok</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
+        body {
             font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
+            background-color: #fff; /* Set a background color */
+            color: #333; /* Ensure text is visible */
+        }
+        .slideshow {
             position: relative;
-            overflow: hidden;
+            max-width: 100%;
+            margin: auto;
         }
-        #videoBackground {
-            position: absolute;
-            top: 0;
-            left: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1;
-            object-fit: cover;
-        }
-        #countdown {
-            font-size: 3em;
-            color: white;
-            margin: 20px 0;
-        }
-        #slideshow {
+        .slideshow img {
             width: 100%;
-            max-width: 600px;
-            position: relative;
-            margin: 20px 0;
+            height: auto;
+            display: none; /* Hide images initially */
         }
-        #slideshow img {
-            width: 100%;
-            display: none;
+        .slideshow img.active {
+            display: block; /* Show only the active image */
         }
-        #slideshow img.active {
-            display: block;
-        }
-        #musicControl {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
+        .caption {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 16px;
         }
     </style>
+    <script>
+        let currentIndex = 0;
+        let images;
+        function initSlideshow() {
+            images = document.querySelectorAll('.slideshow img');
+            images[currentIndex].classList.add('active');
+            setInterval(nextSlide, 3000); // 3 seconds for each slide
+        }
+        function nextSlide() {
+            images[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % images.length;
+            images[currentIndex].classList.add('active');
+        }
+        window.onload = initSlideshow;
+    </script>
 </head>
 <body>
-    <video id="videoBackground" autoplay muted loop>
-        <source src="Bg.mp4" type="video/mp4">
-    </video>
-    <div id="countdown"></div>
-    <div id="slideshow">
-        <img src="foto1.JPG" class="active">
-        <img src="foto2.JPG">
+    <div class="slideshow">
+        <img src="image1.jpg" alt="Caption 1">
+        <div class="caption">Caption for image 1</div>
+        <img src="image2.jpg" alt="Caption 2">
+        <div class="caption">Caption for image 2</div>
+        <img src="image3.jpg" alt="Caption 3">
+        <div class="caption">Caption for image 3</div>
     </div>
-    <audio controls autoplay loop id="musicControl">
-        <source src="musik.mp3" type="audio/mpeg">
-        <source src="voice.mp3" type="audio/mpeg">
-        Your browser does not support the audio tag.
-    </audio>
-    <script>
-        // Slideshow functionality
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('#slideshow img');
-        slides[currentSlide].classList.add('active');
-        setInterval(() => {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }, 5000);
-
-        // Countdown timer functionality
-        const countdownDate = new Date('2026-05-02T00:00:00').getTime();
-        const countdownElement = document.getElementById('countdown');
-        const updateCountdown = () => {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-            if (distance < 0) {
-                countdownElement.innerHTML = 'EXPIRED';
-            }
-        };
-        setInterval(updateCountdown, 1000);
-    </script>
 </body>
 </html>
