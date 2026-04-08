@@ -3,56 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sherlok</title>
+    <title>Selamat Ulang Tahun!</title>
     <style>
         body {
+            margin: 0;
+            background: #f0f0f0;
             font-family: Arial, sans-serif;
-            background-color: #fff; /* Set a background color */
-            color: #333; /* Ensure text is visible */
         }
-        .slideshow {
+        .slideshow-container {
             position: relative;
             max-width: 100%;
             margin: auto;
         }
-        .slideshow img {
-            width: 100%;
-            height: auto;
-            display: none; /* Hide images initially */
-        }
-        .slideshow img.active {
-            display: block; /* Show only the active image */
+        .mySlides {
+            display: none;
         }
         .caption {
             text-align: center;
-            margin-top: 5px;
-            font-size: 16px;
+            font-size: 24px;
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+        .countdown {
+            font-size: 36px;
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
-    <script>
-        let currentIndex = 0;
-        let images;
-        function initSlideshow() {
-            images = document.querySelectorAll('.slideshow img');
-            images[currentIndex].classList.add('active');
-            setInterval(nextSlide, 3000); // 3 seconds for each slide
-        }
-        function nextSlide() {
-            images[currentIndex].classList.remove('active');
-            currentIndex = (currentIndex + 1) % images.length;
-            images[currentIndex].classList.add('active');
-        }
-        window.onload = initSlideshow;
-    </script>
 </head>
 <body>
-    <div class="slideshow">
-        <img src="image1.jpg" alt="Caption 1">
-        <div class="caption">Caption for image 1</div>
-        <img src="image2.jpg" alt="Caption 2">
-        <div class="caption">Caption for image 2</div>
-        <img src="image3.jpg" alt="Caption 3">
-        <div class="caption">Caption for image 3</div>
+
+<div class="slideshow-container">
+    <div class="mySlides">
+        <img src="foto1.JPG" style="width:100%">
+        <div class="caption">Selamat Ulang Tahun!</div>
     </div>
+    <div class="mySlides">
+        <img src="foto2.JPG" style="width:100%">
+        <div class="caption">Harapan dan Cinta</div>
+    </div>
+</div>
+
+<div class="countdown" id="countdown"></div>
+
+<audio controls>
+    <source src="musik.mp3" type="audio/mpeg">
+    <source src="voice.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+        let slides = document.getElementsByClassName("mySlides");
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}    
+        slides[slideIndex - 1].style.display = "block";  
+        setTimeout(showSlides, 3000); // Change slide every 3 seconds
+    }
+
+    // Countdown Timer
+    const countDownDate = new Date("2026-04-08T06:36:21Z").getTime();
+
+    const countdownFunction = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown").innerHTML = days + " Hari " + hours + " Jam " + minutes + " Menit " + seconds + " Detik ";
+
+        if (distance < 0) {
+            clearInterval(countdownFunction);
+            document.getElementById("countdown").innerHTML = "Countdown finished";
+        }
+    }, 1000);
+</script>
+
 </body>
 </html>
