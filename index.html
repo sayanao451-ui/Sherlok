@@ -1,1 +1,113 @@
-PLACEHOLDER_FOR_CONTENT
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perayaan Ulang Tahun</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+        #videoBackground {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+        }
+        .slideshow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+        .slides {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .caption {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #countdown {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <video id="videoBackground" autoplay muted loop>
+        <source src="bg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="slideshow">
+        <div class="slides active">
+            <img src="foto1.jpg" alt="Foto 1">
+            <div class="caption">Selamat Ulang Tahun!</div>
+        </div>
+        <div class="slides">
+            <img src="foto2.jpg" alt="Foto 2">
+            <div class="caption">Harapan dan Cinta</div>
+        </div>
+        <div class="countdown" id="countdown"></div>
+    </div>
+    <audio autoplay loop>
+        <source src="musik.mp3" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio>
+    <script>
+        const countdownDate = new Date('2026-05-02T00:00:00').getTime();
+        const countdownDisplay = document.getElementById('countdown');
+
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownDisplay.innerHTML = `${days} Hari ${hours} Jam ${minutes} Menit ${seconds} Detik`;  
+
+            if (distance < 0) {
+                clearInterval(timer);
+                countdownDisplay.innerHTML = "Selamat ulang tahun!";
+                const voiceMessage = new Audio('voice.mp3');
+                voiceMessage.play();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
