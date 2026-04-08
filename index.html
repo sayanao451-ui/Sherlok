@@ -3,95 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Ulang Tahun!</title>
+    <title>Enhanced Index</title>
     <style>
         body {
-            margin: 0;
-            background: #f0f0f0;
-            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            animation: pulse 5s infinite;
+            transition: background-color 0.5s;
         }
-        .slideshow-container {
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.8; }
+        }
+
+        .slideshow {
             position: relative;
-            max-width: 100%;
-            margin: auto;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
         }
-        .mySlides {
-            display: none;
+
+        .slideshow img {
+            width: 100%;
+            height: auto;
+            animation: fade 1.5s ease-in-out forwards;
         }
-        .caption {
-            text-align: center;
-            font-size: 24px;
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 10px;
+
+        @keyframes fade {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
+
         .countdown {
-            font-size: 36px;
+            font-size: 2em;
             text-align: center;
-            margin-top: 20px;
+            color: #ff4500;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(255, 69, 0, 0.5); }
+            to { text-shadow: 0 0 20px rgba(255, 69, 0, 1); }
+        }
+
+        .scale {
+            transition: transform 0.3s;
+        }
+
+        .scale:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
-
-<div class="slideshow-container">
-    <div class="mySlides">
-        <img src="foto1.JPG" style="width:100%">
-        <div class="caption">Selamat Ulang Tahun!</div>
+    <div class="slideshow">
+        <img src="foto1.JPG" alt="Slide 1" class="scale">
+        <img src="foto2.JPG" alt="Slide 2" class="scale" style="display:none;">
     </div>
-    <div class="mySlides">
-        <img src="foto2.JPG" style="width:100%">
-        <div class="caption">Harapan dan Cinta</div>
-    </div>
-</div>
-
-<div class="countdown" id="countdown"></div>
-
-<audio controls>
-    <source src="musik.mp3" type="audio/mpeg">
-    <source src="voice.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-</audio>
-
-<script>
-    let slideIndex = 0;
-    showSlides();
-
-    function showSlides() {
-        let slides = document.getElementsByClassName("mySlides");
-        for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";  
+    <div class="countdown" id="countdown-timer"></div>
+    <audio controls>
+        <source src="musik.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <script>
+        // Countdown timer script
+        function startCountdown(duration) {
+            let timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                document.getElementById('countdown-timer').textContent = minutes + ':' + seconds;
+                if (--timer < 0) {
+                    timer = duration;
+                }
+            }, 1000);
         }
-        slideIndex++;
-        if (slideIndex > slides.length) {slideIndex = 1}    
-        slides[slideIndex - 1].style.display = "block";  
-        setTimeout(showSlides, 3000); // Change slide every 3 seconds
-    }
 
-    // Countdown Timer
-    const countDownDate = new Date("2026-04-08T06:36:21Z").getTime();
+        // Start countdown with a duration of 120 seconds
+        startCountdown(120);
 
-    const countdownFunction = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = countDownDate - now;
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById("countdown").innerHTML = days + " Hari " + hours + " Jam " + minutes + " Menit " + seconds + " Detik ";
-
-        if (distance < 0) {
-            clearInterval(countdownFunction);
-            document.getElementById("countdown").innerHTML = "Countdown finished";
-        }
-    }, 1000);
-</script>
-
+        // Slideshow logic
+        let slides = document.querySelectorAll('.slideshow img');
+        let currentSlide = 0;
+        setInterval(() => {
+            slides[currentSlide].style.display = 'none';
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].style.display = 'block';
+            slides[currentSlide].classList.add('scale');
+        }, 3000);
+    </script>
+    <video width="320" height="240" controls>
+        <source src="Bg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 </body>
 </html>
